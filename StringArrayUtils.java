@@ -1,5 +1,4 @@
- 
-
+import java.util.ArrayList;
 /**
  * Created by leon on 1/29/18.
  */
@@ -9,7 +8,7 @@ public class StringArrayUtils {
      * @return first element of specified array
      */ // TODO
     public static String getFirstElement(String[] array) {
-        return null;
+        return (array.length > 0) ? array[0] : "";
     }
 
     /**
@@ -17,7 +16,7 @@ public class StringArrayUtils {
      * @return second element in specified array
      */
     public static String getSecondElement(String[] array) {
-        return null;
+        return (array.length > 1) ? array[1] : "";
     }
 
     /**
@@ -25,7 +24,7 @@ public class StringArrayUtils {
      * @return last element in specified array
      */ // TODO
     public static String getLastElement(String[] array) {
-        return null;
+        return (array.length > 0) ? array[array.length - 1] : "";
     }
 
     /**
@@ -33,7 +32,7 @@ public class StringArrayUtils {
      * @return second to last element in specified array
      */ // TODO
     public static String getSecondToLastElement(String[] array) {
-        return null;
+        return (array.length > 1) ? array[array.length - 2] : "";
     }
 
     /**
@@ -42,7 +41,16 @@ public class StringArrayUtils {
      * @return true if the array contains the specified `value`
      */ // TODO
     public static boolean contains(String[] array, String value) {
-        return false;
+        boolean found = false;
+        for(int idx = 0; idx < array.length; idx ++)
+        {
+            if(array[idx].equals(value))
+            {
+                found = true;
+                break;
+            }
+        }
+        return found;
     }
 
     /**
@@ -50,7 +58,27 @@ public class StringArrayUtils {
      * @return an array with identical contents in reverse order
      */ // TODO
     public static String[] reverse(String[] array) {
-        return null;
+        /************ NOT Effective *****************************/
+        /*
+        String[] outArr = new String[array.length];
+        
+        for(int inIdx = array.length-1, outIdx = 0; inIdx >= 0; 
+                                                inIdx--, outIdx++)
+        {
+            outArr[outIdx] = array[inIdx];
+        }
+        return outArr;
+        */
+       
+        String temp = null;
+        for(int startIdx = 0, endIdx = array.length-1; startIdx <= array.length / 2; 
+                                                endIdx--, startIdx++)
+        {
+            temp = array[startIdx];
+            array[startIdx] = array[endIdx];
+            array[endIdx] = temp;
+        }
+        return array;
     }
 
     /**
@@ -58,7 +86,19 @@ public class StringArrayUtils {
      * @return true if the order of the array is the same backwards and forwards
      */ // TODO
     public static boolean isPalindromic(String[] array) {
-        return false;
+        boolean isPalindrom = true;
+        
+        for(int inIdx = array.length-1, outIdx = 0; inIdx >= array.length/2; 
+                                                inIdx--, outIdx++)
+        {
+            if(!array[outIdx].equals(array[inIdx]))
+            {
+                isPalindrom = false;
+                break;
+            }
+        }
+
+        return isPalindrom;
     }
 
     /**
@@ -66,7 +106,27 @@ public class StringArrayUtils {
      * @return true if each letter in the alphabet has been used in the array
      */ // TODO
     public static boolean isPangramic(String[] array) {
-        return false;
+        boolean isPresent = false;
+        char startChar = 'a';
+        int charIdx = 0;
+        for(charIdx = startChar; charIdx < startChar + 26; charIdx++)
+        {
+            isPresent = false;
+            for(int arrayIdx = 0 ; arrayIdx < array.length; arrayIdx ++)
+            {
+                if(array[arrayIdx].toLowerCase().
+                                contains(String.valueOf((char)charIdx)))
+                {
+                    isPresent = true;
+                    break;
+                }
+            }
+            if(isPresent == false)
+                break;
+        }
+        
+
+        return (charIdx == startChar + 26);
     }
 
     /**
@@ -75,7 +135,15 @@ public class StringArrayUtils {
      * @return number of occurrences the specified `value` has occurred
      */ // TODO
     public static int getNumberOfOccurrences(String[] array, String value) {
-        return 0;
+        int numberOfOccurrences = 0;
+        for(int idx = 0; idx < array.length; idx ++)
+        {
+            if(array[idx].equals(value))
+            {
+                numberOfOccurrences ++ ;
+            }
+        }
+        return numberOfOccurrences;
     }
 
     /**
@@ -83,8 +151,34 @@ public class StringArrayUtils {
      * @param valueToRemove value to remove from array
      * @return array with identical contents excluding values of `value`
      */ // TODO
-    public static String[] removeValue(String[] array, String valueToRemove) {
-        return null;
+    public static String[] removeValue(String[] array, String valueToRemove) 
+    {
+        //**************************** Without ArrayList**************//
+        /*
+        int noOfOccurrences = getNumberOfOccurrences(array, valueToRemove);
+        String[] outArray = new String[array.length - noOfOccurrences];
+        for(int idx = 0, outIdx = 0; idx < array.length; idx ++)
+        {
+            if(!array[idx].equals(valueToRemove))
+            {
+                outArray[outIdx] = array[idx];
+                outIdx++;
+            }
+        }
+        return outArray;
+        */
+       
+        ArrayList<String> arrayList = new ArrayList<String>();
+        for(int idx = 0; idx < array.length; idx ++)
+        {
+        if(!array[idx].equals(valueToRemove))
+            {
+                arrayList.add(array[idx]);
+            }
+        }
+        String[] outArray = new String[arrayList.size()];
+        arrayList.toArray(outArray);
+        return outArray;
     }
 
     /**
@@ -92,7 +186,47 @@ public class StringArrayUtils {
      * @return array of Strings with consecutive duplicates removes
      */ // TODO
     public static String[] removeConsecutiveDuplicates(String[] array) {
-        return null;
+        //**************************** Without ArrayList**************//
+        /*
+        int sizeOfOutArray = 1;
+        String strToCheck = array[0];
+        int outIdx = 1;
+        for(int idx = 1; idx < array.length; idx ++)
+        {
+            if(!array[idx].equals(strToCheck))
+            {
+                sizeOfOutArray++;
+                strToCheck = array[idx];
+            }
+        }
+        String[] outArray = new String[sizeOfOutArray];
+        strToCheck = array[0];
+        outArray[0] = array[0];
+        for(int idx = 1; idx < array.length; idx ++)
+        {
+            if(!array[idx].equals(strToCheck))
+            {
+                outArray[outIdx] = array[idx];
+                outIdx++;
+                strToCheck = array[idx];
+            }
+        }
+        return outArray;*/
+       
+        String strToCheck = array[0];
+        ArrayList<String> arrayList = new ArrayList<String>();
+        arrayList.add(strToCheck);
+        for(int idx = 1; idx < array.length; idx ++)
+        {
+            if(!array[idx].equals(strToCheck))
+            {
+                arrayList.add(array[idx]);
+                strToCheck = array[idx];
+            }
+        }
+        String[] outArray = new String[arrayList.size()];
+        arrayList.toArray(outArray);
+        return outArray;
     }
 
     /**
@@ -100,7 +234,26 @@ public class StringArrayUtils {
      * @return array of Strings with each consecutive duplicate occurrence concatenated as a single string in an array of Strings
      */ // TODO
     public static String[] packConsecutiveDuplicates(String[] array) {
-        return null;
+       String strToCheck = array[0];
+       ArrayList<String> arrayList = new ArrayList<String>();
+       String packedStr = strToCheck;
+       for(int idx = 1; idx < array.length; idx ++)
+       {
+            if(array[idx].equals(strToCheck))
+            {
+                packedStr += strToCheck;
+            }
+            else
+            {
+                strToCheck = array[idx];
+                arrayList.add(packedStr);
+                packedStr = strToCheck;
+            }
+       }
+       arrayList.add(packedStr);
+       String[] outArray = new String[arrayList.size()];
+       arrayList.toArray(outArray);
+       return outArray;
     }
 
 
